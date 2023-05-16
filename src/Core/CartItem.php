@@ -4,6 +4,7 @@ namespace Freshbitsweb\LaravelCartManager\Core;
 
 use Freshbitsweb\LaravelCartManager\Exceptions\ItemNameMissing;
 use Freshbitsweb\LaravelCartManager\Exceptions\ItemPriceMissing;
+use Freshbitsweb\LaravelCartManager\Exceptions\ItemTaxMissing;
 use Illuminate\Contracts\Support\Arrayable;
 
 class CartItem implements Arrayable
@@ -17,6 +18,10 @@ class CartItem implements Arrayable
     public $name;
 
     public $price;
+
+    public $priceWithTax;
+
+    public $tax;
 
     public $image = null;
 
@@ -51,6 +56,8 @@ class CartItem implements Arrayable
         $this->modelId = $entity->{$entity->getKeyName()};
         $this->setName($entity);
         $this->setPrice($entity);
+        $this->setTax($entity);
+        $this->setPriceWithTax($entity);
         $this->setImage($entity);
         $this->quantity = $quantity;
 
@@ -70,6 +77,8 @@ class CartItem implements Arrayable
         $this->modelId = $array['modelId'];
         $this->name = $array['name'];
         $this->price = $array['price'];
+        $this->priceWithTax = $array['priceWithTax'];
+        $this->tax = $array['tax'];
         $this->image = $array['image'];
         $this->quantity = $array['quantity'];
 
@@ -138,6 +147,40 @@ class CartItem implements Arrayable
         throw ItemPriceMissing::for($this->modelType);
     }
 
+    protected function setPriceWithTax($entity)
+    {
+        if (method_exists($entity, 'getPriceWithTax')) {
+            $this->priceWithTax = $entity->getPriceWithTax();
+
+            return;
+        }
+
+        if ($entity->offsetExists('priceWithTax')) {
+            $this->priceWithTax = $entity->priceWithTax;
+
+            return;
+        }
+
+        throw ItemPriceMissing::for($this->modelType);
+    }
+
+    protected function setTax($entity)
+    {
+        if (method_exists($entity, 'getTax')) {
+            $this->tax = $entity->getTax();
+
+            return;
+        }
+
+        if ($entity->offsetExists('tax')) {
+            $this->tax = $entity->tax;
+
+            return;
+        }
+
+        throw ItemTaxMissing::for($this->modelType);
+    }
+
     /**
      * Sets the image of the item.
      *
@@ -169,6 +212,8 @@ class CartItem implements Arrayable
             'modelId' => $this->modelId,
             'name' => $this->name,
             'price' => $this->price,
+            'priceWithTax' => $this->priceWithTax,
+            'tax' => $this->tax,
             'image' => $this->image,
             'quantity' => $this->quantity,
         ];
