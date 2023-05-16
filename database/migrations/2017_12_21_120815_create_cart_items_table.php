@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('model_id')->unsigned();
             $table->string('name');
             $table->decimal('price', 8, 2);
+            $table->integer('tax');
             $table->string('image')->nullable();
             $table->integer('quantity')->unsigned();
             $table->timestamps();

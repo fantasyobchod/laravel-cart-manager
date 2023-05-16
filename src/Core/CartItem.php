@@ -154,7 +154,7 @@ class CartItem implements Arrayable
             return;
         }
 
-        if ($entity->offsetExists('priceWithTax')) {
+        if ($entity->offsetExists('price') && $entity->offsetExists('tax')) {
 
             $this->priceWithTax = ($this->price * ($this->tax / 100 + 1));
 
