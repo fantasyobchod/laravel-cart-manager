@@ -77,7 +77,6 @@ class CartItem implements Arrayable
         $this->modelId = $array['modelId'];
         $this->name = $array['name'];
         $this->price = $array['price'];
-        $this->priceWithTax = $array['priceWithTax'];
         $this->tax = $array['tax'];
         $this->image = $array['image'];
         $this->quantity = $array['quantity'];
@@ -156,7 +155,8 @@ class CartItem implements Arrayable
         }
 
         if ($entity->offsetExists('priceWithTax')) {
-            $this->priceWithTax = $entity->priceWithTax;
+
+            $this->priceWithTax = ($this->price * ($this->tax / 100 + 1));
 
             return;
         }
