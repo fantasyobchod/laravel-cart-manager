@@ -78,6 +78,7 @@ class CartItem implements Arrayable
         $this->name = $array['name'];
         $this->price = $array['price'];
         $this->tax = $array['tax'];
+        $this->priceWithTax = ($array['price'] * ($array['tax'] / 100 + 1));
         $this->image = $array['image'];
         $this->quantity = $array['quantity'];
 
