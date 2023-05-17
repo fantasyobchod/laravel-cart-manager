@@ -38,7 +38,7 @@ trait CartTotals
     protected function setSubtotal()
     {
         $this->subtotal = round($this->items->sum(function ($cartItem) {
-            return $cartItem->price * $cartItem->quantity;
+            return $cartItem->priceWithTax * $cartItem->quantity;
         }), 2);
     }
 
